@@ -2,12 +2,9 @@ import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 
 export const Todo = ( {id, title, remove} ) => {
-    const removeHandler = () => {
-        remove(id)
-    }
     return (
         <TouchableOpacity activeOpacity={0.5} 
-                          onLongPress={removeHandler}>
+                          onLongPress={remove.bind(null, id)}>
             <View style={style.todo}>
                 <Text>{title}</Text>
             </View>
