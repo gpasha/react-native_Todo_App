@@ -8,18 +8,6 @@ export default function App() {
 
   const [todos, setTodos] = useState( [] );
   const addTodo = (title) => {
-    // const newTodo = {
-    //   id: Date.now().toString(),
-    //   title: title
-    // }
-    // setTodos(todos.concat(newTodo));
-    // setTodos([...todos, newTodo])
-    // setTodos(prev => {
-    //   return [
-    //     ...prev,
-    //     newTodo
-    //   ]
-    // })
     setTodos( prev => [
       ...prev,
       {
@@ -28,10 +16,9 @@ export default function App() {
       }
     ])
   }
-
-  // let todoList = todos.map( toDo => {
-  //   return <Todo key={toDo.id} title={toDo.title}></Todo>
-  // })
+  const removeTodo = (id) => {
+    setTodos( prev => prev.filter( el => el.id !== id ))
+  }
   
   return (
     <View style={styles.container}>
@@ -41,16 +28,10 @@ export default function App() {
         style={styles.containerList}
         data={todos}
         renderItem={({ item }) => (
-          <Todo title={item.title} />
+          <Todo id={item.id} title={item.title} remove={removeTodo} />
         )}      
         keyExtractor={item => item.id}
       />
-      {/* <ScrollView>
-        { todos.map( toDo => {()
-            return <Todo key={toDo.id} title={toDo.title}></Todo>
-          })
-        }
-      </ScrollView> */}
     </View>
   );
 }
