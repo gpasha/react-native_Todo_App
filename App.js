@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Text, View, FlatList} from 'react-native'
-import { Navbar } from './src/Navbar'
-import { AppTodo } from './src/AppTodo'
-import { Todo } from './src/Todo'
+import { View, Alert} from 'react-native'
+import { Navbar } from './src/components/Navbar'
+import { MainScreen } from './src/screens/MainScreen'
+import { TodoScreen } from './src/screens/TodoScreen'
 
 export default function App() {
+  const [todoId, setTodoId] = useState(null)
+  const [todos, setTodos] = useState( [] )
 
-  const [todos, setTodos] = useState( [] );
   const addTodo = (title) => {
     setTodos( prev => [
       ...prev,
@@ -16,28 +17,53 @@ export default function App() {
       }
     ])
   }
+
   const removeTodo = (id) => {
-    setTodos( prev => prev.filter( el => el.id !== id ))
+    const todoDelete = todos.find( t => t.id === id )
+    Alert.alert(
+      'Remove item',
+      `Do you really want to remove the "${todoDelete.title}"?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel'
+        },
+        { text: 'OK',
+          onPress: () => {
+            setTodoId(null)
+            setTodos( prev => prev.filter( el => el.id !== id ))
+          }
+        }
+      ]
+    );
+    
   }
-  
+
+  const updateTodo = (id, title) => {
+    setTodos( old => old.map( item => {
+      if ( item.id === id ) {
+        item.title = title
+      }
+      return item
+    }))
+  }
+
+  let content = (
+    <MainScreen todos={todos}
+                addTodo={addTodo}
+                removeTodo={removeTodo}
+                openTodo={setTodoId} /> 
+  )
+
+  if ( todoId ) {
+    let selectedTodo = todos.find( todo => todo.id === todoId);
+    content = <TodoScreen todo={selectedTodo} remove={removeTodo} goBack={() => setTodoId(null)} save={updateTodo} />
+  }
+
   return (
-    <View style={styles.container}>
+    <View>
       <Navbar title='Todo APP'/>
-      <AppTodo onSubmit={addTodo} />
-      <FlatList
-        style={styles.containerList}
-        data={todos}
-        renderItem={({ item }) => (
-          <Todo id={item.id} title={item.title} remove={removeTodo} />
-        )}      
-        keyExtractor={item => item.id}
-      />
+      { content }
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  containerList: {
-    maxHeight: '80%'
-  }
-});
