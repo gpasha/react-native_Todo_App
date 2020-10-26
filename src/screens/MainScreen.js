@@ -1,19 +1,46 @@
-import React from 'react'
-import { View, StyleSheet, FlatList, Image } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, FlatList, Image, Dimensions } from 'react-native'
 import { AppTodo } from '.././components/AppTodo'
 import { Todo } from '.././components/Todo'
+import { THEME } from '../theme'
 
 export const MainScreen = ({ addTodo, removeTodo, todos, openTodo }) => {
 
+  const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width)
+
+  useEffect( () => {
+    const updateDeviceWidth = () => {
+      const width = Dimensions.get('window').width
+      setDeviceWidth(width)
+    }
+    Dimensions.addEventListener('change', updateDeviceWidth)
+    return () => {
+      Dimensions.removeEventListener('change', updateDeviceWidth)
+    }
+  })
+
+  
   let content = (
-    <FlatList
-      style={styles.containerList}
-      data={todos}
-      renderItem={({ item }) => (
-          <Todo id={item.id} title={item.title} remove={removeTodo} openTodo={openTodo} />
-      )}      
-      keyExtractor={item => item.id}
-    />
+    // styles adaptive
+    // <FlatList
+    //   style={styles.containerList}
+    //   data={todos}
+    //   renderItem={({ item }) => (
+    //       <Todo id={item.id} title={item.title} remove={removeTodo} openTodo={openTodo} />
+    //   )}      
+    //   keyExtractor={item => item.id}
+    // />
+    
+    // adaptive with Dimensions object
+    <View style={{ width: deviceWidth }}>
+      <FlatList
+        data={todos}
+        renderItem={({ item }) => (
+            <Todo id={item.id} title={item.title} remove={removeTodo} openTodo={openTodo} />
+        )}      
+        keyExtractor={item => item.id}
+      />
+    </View>
   )
 
   if ( todos.length === 0 ) {

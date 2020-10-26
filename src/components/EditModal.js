@@ -1,6 +1,8 @@
+import { AntDesign } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import { View, StyleSheet, Modal, Button, TextInput,Alert } from 'react-native'
 import { THEME } from '../theme'
+import { AppButton } from '../ui/AppButton'
 
 export const EditModal = ({ modalVisible, onCancel, value, saveTodo }) => {
 
@@ -33,8 +35,10 @@ export const EditModal = ({ modalVisible, onCancel, value, saveTodo }) => {
                             value={title}
                             onChangeText={setTitle} />
                 <View style={styles.buttons} >
-                    <Button title='Cancel' color={THEME.RED_COLOR} onPress={onCancel} />
-                    <Button title='Save' onPress={saveHandler} />
+                    <AppButton color={THEME.RED_COLOR} onPress={onCancel}>Cancel</AppButton>
+                    {/* <Button title='Cancel' color={THEME.RED_COLOR} onPress={onCancel} /> */}
+                    <AppButton color={THEME.GREEN_COLOR} onPress={saveHandler}>Save</AppButton>
+                    {/* <Button title='Save' onPress={saveHandler} /> */}
                 </View>
             </View>
         </Modal>
@@ -58,6 +62,7 @@ const styles = StyleSheet.create({
     buttons: {
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        marginVertical: 10
     }
 })

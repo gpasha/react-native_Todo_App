@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native'
+import { View, TextInput, Button, StyleSheet, Alert, Keyboard } from 'react-native'
 import { THEME } from '../theme'
+import { AntDesign } from '@expo/vector-icons'; 
 
 export const AppTodo = ( { onSubmit } ) => {
 
@@ -10,6 +11,7 @@ export const AppTodo = ( { onSubmit } ) => {
         if (value.trim()) {
             onSubmit(value)
             setValue('')
+            Keyboard.dismiss()
         }
         else {
             Alert.alert('The input can not be empty');
@@ -24,7 +26,9 @@ export const AppTodo = ( { onSubmit } ) => {
                         placeholder='Enter the task name'
                         autoCorrect={true}
                         autoCapitalize='none' />
-            <Button title='Add' style={styles.button} onPress={ onPressAdd }/>
+            <AntDesign.Button name="pluscircleo" onPress={ onPressAdd } >
+                Add
+            </AntDesign.Button>
         </View>
     )
 }
