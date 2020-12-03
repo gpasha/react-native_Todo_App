@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, StyleSheet, Dimensions } from 'react-native'
 import { FontAwesome, AntDesign } from '@expo/vector-icons'
 import { THEME } from '../theme'
@@ -6,12 +6,21 @@ import { AppCard } from '../ui/AppCard'
 import { EditModal } from '../components/EditModal'
 import { AppTextBold } from '../ui/AppTextBold'
 import { AppButton } from '../ui/AppButton'
+import { TodoContext } from '../context/todo/todoContext'
+import { ScreenContext } from '../context/screen/screenContext'
 
-export const TodoScreen = ({ todo, goBack, remove, save }) => {
+export const TodoScreen = () => {
+
+    const { todos, removeTodo, updateTodo } = useContext(TodoContext)
+
+    const { changeScreens, todoId } = useContext(ScreenContext)
+
+    const todo = todos.find( t => t.id === todoId )
+
     const [modal, setModal] = useState(false);
 
     const saveHandler = title => {
-        save(todo.id, title)
+        updateTodo(todo.id, title)
         setModal(false)
     }
     
@@ -33,13 +42,13 @@ export const TodoScreen = ({ todo, goBack, remove, save }) => {
             <View style={styles.buttons}>
                 <View style={styles.button}>
                     {/* <Button title='Cancel' color={THEME.GREY_COLOR} onPress={goBack} /> */}
-                    <AppButton onPress={goBack} color={THEME.GREY_COLOR}>
+                    <AppButton onPress={ () => changeScreens(null) } color={THEME.GREY_COLOR}>
                         <AntDesign name='back' size={20} />
                     </AppButton>
                 </View>
                 <View style={styles.button}>
                     {/* <Button title='Delete' color={THEME.RED_COLOR} onPress={() => remove(todo.id)} /> */}
-                    <AppButton  onPress={() => remove(todo.id)} color={THEME.RED_COLOR}>
+                    <AppButton  onPress={() => removeTodo(todo.id)} color={THEME.RED_COLOR}>
                         <FontAwesome name='remove' size={20} />
                     </AppButton>
                 </View>

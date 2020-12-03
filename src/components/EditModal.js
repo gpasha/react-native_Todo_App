@@ -6,7 +6,7 @@ import { AppButton } from '../ui/AppButton'
 
 export const EditModal = ({ modalVisible, onCancel, value, saveTodo }) => {
 
-    const [title, setTitle ] = useState(value)
+    const [title, setTitle] = useState(value)
 
     const saveHandler = () => {
         if ( title.trim().length < 3 ){
@@ -19,6 +19,11 @@ export const EditModal = ({ modalVisible, onCancel, value, saveTodo }) => {
         else (
             saveTodo(title)
         )
+    }
+
+    const cancelHandler = () => {
+        setTitle(value)
+        onCancel()
     }
 
     return (
@@ -35,7 +40,7 @@ export const EditModal = ({ modalVisible, onCancel, value, saveTodo }) => {
                             value={title}
                             onChangeText={setTitle} />
                 <View style={styles.buttons} >
-                    <AppButton color={THEME.RED_COLOR} onPress={onCancel}>Cancel</AppButton>
+                    <AppButton color={THEME.RED_COLOR} onPress={cancelHandler}>Cancel</AppButton>
                     {/* <Button title='Cancel' color={THEME.RED_COLOR} onPress={onCancel} /> */}
                     <AppButton color={THEME.GREEN_COLOR} onPress={saveHandler}>Save</AppButton>
                     {/* <Button title='Save' onPress={saveHandler} /> */}
