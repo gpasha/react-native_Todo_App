@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Navbar } from './components/Navbar'
 import { MainScreen } from './screens/MainScreen'
 import { TodoScreen } from './screens/TodoScreen'
@@ -10,7 +10,7 @@ export const MainLayout = () => {
   const { todoId } = useContext(ScreenContext)
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       <Navbar title='Todo APP'/>
 
       { ( todoId ) ? <TodoScreen /> : <MainScreen /> }
@@ -18,3 +18,9 @@ export const MainLayout = () => {
     </View>
     )
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+  }
+})

@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { AppTextBold } from '../ui/AppTextBold'
 import { THEME } from '../theme'
 
-export const AppButton = ({ children, onPress, color = THEME.MAIN_COLOR}) => {
+export const AppButton = ({ children, onPress, color = THEME.GREEN_COLOR}) => {
 
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={0.5}>

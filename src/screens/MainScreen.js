@@ -1,17 +1,26 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { View, StyleSheet, FlatList, Image, Dimensions } from 'react-native'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
+import { View, Text, StyleSheet, FlatList, Image, Dimensions } from 'react-native'
 import { AppTodo } from '.././components/AppTodo'
 import { Todo } from '.././components/Todo'
 import { ScreenContext } from '../context/screen/screenContext'
 import { TodoContext } from '../context/todo/todoContext'
 import { THEME } from '../theme'
+import { AppButton } from '../ui/AppButton'
+import { AppLoader } from '../ui/AppLoader'
 
 export const MainScreen = ({ }) => {
 
-  const { addTodo, todos, removeTodo } = useContext(TodoContext)
+  const { todos, loading, error, fetchTodos, addTodo, removeTodo } = useContext(TodoContext)
+  
   const { changeScreens } = useContext(ScreenContext)
 
   const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width)
+
+  const loadTodos = useCallback( async () => await fetchTodos(), [fetchTodos] )
+
+  useEffect(() => {
+    loadTodos()
+  }, [])
 
   useEffect( () => {
     const updateDeviceWidth = () => {
@@ -24,18 +33,20 @@ export const MainScreen = ({ }) => {
     }
   })
 
+  if ( loading ) {
+    return <AppLoader />
+  }
+
+  if ( error ) {
+    return (
+      <View style={styles.errorWrapper}>
+        <Text style={styles.errorText}>{error}</Text>
+        <AppButton onPress={loadTodos}>Try again</AppButton>
+      </View>
+    )
+  }
   
-  let content = (
-    // styles adaptive
-    // <FlatList
-    //   style={styles.containerList}
-    //   data={todos}
-    //   renderItem={({ item }) => (
-    //       <Todo id={item.id} title={item.title} remove={removeTodo} openTodo={openTodo} />
-    //   )}      
-    //   keyExtractor={item => item.id}
-    // />
-    
+  let content = (    
     // adaptive with Dimensions object
     <View style={{ width: deviceWidth }}>
       <FlatList
@@ -82,5 +93,14 @@ const styles = StyleSheet.create({
     height: '80%',
     resizeMode: 'contain',
     opacity: 0.2
+  },
+  errorWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  errorText: {
+    fontSize: 20,
+    color: THEME.RED_COLOR
   }
 });
